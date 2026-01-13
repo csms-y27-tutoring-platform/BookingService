@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Protobuf Include="Protos\booking.proto" ProtoRoot="Protos" GrpcServices="Server" />
+      <Protobuf Include="Protos\booking_history.proto" ProtoRoot="Protos" GrpcServices="Server" />
+      <Protobuf Include="Protos\schedule.proto" ProtoRoot="Protos" GrpcServices="Client" />
+      <Protobuf Include="Protos\validation.proto" ProtoRoot="Protos" GrpcServices="Client" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Application\BookingService.Application.Contracts\BookingService.Application.Contracts.csproj" />
+      <ProjectReference Include="..\..\Application\BookingService.Application.Domain\BookingService.Application.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" />
+      <PackageReference Include="Grpc.AspNetCore" />
+      <PackageReference Include="Grpc.AspNetCore.Server" />
+      <PackageReference Include="Grpc.Core" />
+      <PackageReference Include="Grpc.Tools">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+</Project>

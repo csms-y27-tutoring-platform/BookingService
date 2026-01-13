@@ -1,0 +1,40 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package tutor.service;
+
+service ScheduleService {
+  rpc CreateScheduleSlot (CreateScheduleSlotRequest) returns (CreateScheduleSlotResponse);
+  rpc ReserveSlot (ReserveSlotRequest) returns (ReserveSlotResponse);
+  rpc ReleaseSlot (ReleaseSlotRequest) returns (ReleaseSlotResponse);
+}
+
+message CreateScheduleSlotRequest {
+  string tutor_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+}
+
+message CreateScheduleSlotResponse {
+  string slot_id = 1;
+}
+
+message ReserveSlotRequest {
+  string slot_id = 1;
+  string booking_id = 2;
+}
+
+message ReserveSlotResponse {
+  string slot_id = 1;
+  google.protobuf.Timestamp reserved_at = 2;
+}
+
+message ReleaseSlotRequest {
+  string slot_id = 1;
+}
+
+message ReleaseSlotResponse {
+  string slot_id = 1;
+  google.protobuf.Timestamp released_at = 2;
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "BookingService.Presentation.Kafka";
+
+package booking.events;
+
+message BookingEventKey {
+  int64 booking_id = 1;
+}
+
+message BookingEventValue {
+  oneof event {
+    BookingCreated booking_created = 1;
+    BookingCancelled booking_cancelled = 2;
+    BookingCompleted booking_completed = 3;
+  }
+}
+
+message BookingCreated {
+  int64 booking_id = 1;
+  string created_by = 2;
+}
+
+message BookingCancelled {
+  int64 booking_id = 1;
+  string cancelled_by = 2;
+  string reason = 3;
+}
+
+message BookingCompleted {
+  int64 booking_id = 1;
+}

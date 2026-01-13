@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "BookingService.Presentation.Grpc";
+
+package booking;
+
+enum BookingHistoryItemKind {
+  BOOKING_HISTORY_ITEM_UNSPECIFIED = 0;
+  BOOKING_HISTORY_ITEM_CREATED = 1;
+  BOOKING_HISTORY_ITEM_CANCELLED = 2;
+  BOOKING_HISTORY_ITEM_COMPLETED = 3;
+}
+
+message HistoryItemPayloadCreated {
+  string created_by = 1;
+}
+message HistoryItemPayloadCancelled {
+  string cancelled_by = 1;
+  string reason = 2;
+}
+message HistoryItemPayloadCompleted {}
+
+message BookingHistoryPayload {
+  oneof payload {
+    HistoryItemPayloadCreated created = 5;
+    HistoryItemPayloadCancelled cancelled = 6;
+    HistoryItemPayloadCompleted completed = 7;
+  }
+}
+
+message BookingHistory {
+  int64 booking_history_item_id = 1;
+  int64 booking_id = 2;
+  BookingHistoryItemKind kind = 3;
+  google.protobuf.Timestamp created_at = 4;
+  BookingHistoryPayload payload = 5;
+}

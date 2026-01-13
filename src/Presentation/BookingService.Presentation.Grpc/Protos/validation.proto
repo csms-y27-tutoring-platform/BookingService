@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+package tutor.service;
+
+service ValidationService {
+  rpc ValidateSlot (ValidateSlotRequest) returns (ValidateSlotResponse);
+}
+
+message ValidateSlotRequest {
+  string slot_id = 1;
+  string tutor_id = 2;
+  string subject_id = 3;
+}
+
+message ValidateSlotResponse {
+  bool is_valid = 1;
+  double price_per_hour = 2;
+}
