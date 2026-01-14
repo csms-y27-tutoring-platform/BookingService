@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService.Presentation
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService.Presentation.Grpc", "src/Presentation/BookingService.Presentation.Grpc/BookingService.Presentation.Grpc.csproj", "{93F2EE77-0424-4694-9052-18AD14BE7D80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService.Tools", "src\BookingService.Tools\BookingService.Tools.csproj", "{BD99A1F0-B437-4ACA-A5D1-E0D430D0964C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{93F2EE77-0424-4694-9052-18AD14BE7D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93F2EE77-0424-4694-9052-18AD14BE7D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93F2EE77-0424-4694-9052-18AD14BE7D80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD99A1F0-B437-4ACA-A5D1-E0D430D0964C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD99A1F0-B437-4ACA-A5D1-E0D430D0964C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD99A1F0-B437-4ACA-A5D1-E0D430D0964C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD99A1F0-B437-4ACA-A5D1-E0D430D0964C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{507EC7CF-C7C4-48AF-B1EA-091102988E8A} = {8833503A-C59A-4C83-831F-F68A64110EB7}
@@ -82,5 +88,6 @@ Global
 		{88AA734D-4CFE-4CC5-929B-47FFE1D666B7} = {8833503A-C59A-4C83-831F-F68A64110EB7}
 		{D242CEA7-74A5-4070-B142-A827C633D8FB} = {88AA734D-4CFE-4CC5-929B-47FFE1D666B7}
 		{93F2EE77-0424-4694-9052-18AD14BE7D80} = {88AA734D-4CFE-4CC5-929B-47FFE1D666B7}
+		{BD99A1F0-B437-4ACA-A5D1-E0D430D0964C} = {8833503A-C59A-4C83-831F-F68A64110EB7}
 	EndGlobalSection
 EndGlobal

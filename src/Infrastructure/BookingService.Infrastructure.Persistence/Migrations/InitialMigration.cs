@@ -4,6 +4,7 @@ using FluentMigrator.Infrastructure;
 
 namespace BookingService.Infrastructure.Persistence.Migrations;
 
+[Migration(version: 2026011401, description: "Initial migration")]
 public class InitialMigration : IMigration
 {
     public void GetUpExpressions(IMigrationContext context)
@@ -11,7 +12,12 @@ public class InitialMigration : IMigration
         context.Expressions.Add(new ExecuteSqlStatementExpression
         {
             SqlStatement = """
-                           create type if not exists booking_status as enum ('created', 'cancelled', 'completed');
+                           do $$
+                           begin
+                                create type booking_status as enum ('created', 'cancelled', 'completed');
+                           exception
+                                when duplicate_object then null;
+                           end$$;
                            
                            create table if not exists bookings
                            (
@@ -22,10 +28,15 @@ public class InitialMigration : IMigration
                                subject_id         bigint                   not null,
                                booking_status     booking_status           not null,
                                booking_created_by text                     not null,
-                               booking_created_at timestamp with time zone not null,
+                               booking_created_at timestamp with time zone not null
                            );
                            
-                           create type if not exists booking_history_item_kind as enum ('created', 'cancelled', 'completed');
+                           do $$
+                           begin
+                                create type booking_history_item_kind as enum ('created', 'cancelled', 'completed');
+                           exception
+                                when duplicate_object then null;
+                           end$$;
 
                            create table if not exists booking_history
                            (
@@ -45,10 +56,10 @@ public class InitialMigration : IMigration
         context.Expressions.Add(new ExecuteSqlStatementExpression
         {
             SqlStatement = """
-                           drop type  if exists booking_status;
+                           drop table if exists booking_history;
                            drop table if exists bookings;
                            drop type  if exists booking_history_item_kind;
-                           drop table if exists booking_history;
+                           drop type  if exists booking_status;
                            """
         });
     }

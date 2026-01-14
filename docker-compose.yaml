@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: booking-service-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=BookingService
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    networks:
+      - tutoring-platform-network
+  
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    restart: unless-stopped
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - tutoring-platform-network
+  
+  kafka:
+    image: wurstmeister/kafka:latest
+    restart: unless-stopped
+    environment:
+      KAFKA_LOG_DIRS: /kafka-data
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CREATE_TOPICS: >
+        booking.created:1:1,
+        booking.cancelled:1:1,
+        booking.completed:1:1
+    depends_on:
+      - zookeeper
+    networks:
+      - tutoring-platform-network
+    volumes:
+      - tutoring-platform-kafka-data:/kafka-data
+    ports:
+      - '9092:9092'
+
+networks:
+  tutoring-platform-network:
+    driver: bridge
+
+volumes:
+  tutoring-platform-kafka-data:

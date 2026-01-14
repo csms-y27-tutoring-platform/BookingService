@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Application\BookingService.Application\BookingService.Application.csproj" />
+      <ProjectReference Include="..\Infrastructure\BookingService.Infrastructure.Grpc\BookingService.Infrastructure.Grpc.csproj" />
+      <ProjectReference Include="..\Infrastructure\BookingService.Infrastructure.Kafka\BookingService.Infrastructure.Kafka.csproj" />
+      <ProjectReference Include="..\Infrastructure\BookingService.Infrastructure.Persistence\BookingService.Infrastructure.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Grpc.AspNetCore.Server.Reflection" />
+    </ItemGroup>
+
+</Project>

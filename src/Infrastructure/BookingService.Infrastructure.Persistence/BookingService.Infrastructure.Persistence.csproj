@@ -12,7 +12,11 @@
 
     <ItemGroup>
       <PackageReference Include="FluentMigrator" />
+      <PackageReference Include="FluentMigrator.Runner.Core" />
+      <PackageReference Include="FluentMigrator.Runner.Postgres" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" />
       <PackageReference Include="Microsoft.Extensions.Options" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
     </ItemGroup>
 
 </Project>
