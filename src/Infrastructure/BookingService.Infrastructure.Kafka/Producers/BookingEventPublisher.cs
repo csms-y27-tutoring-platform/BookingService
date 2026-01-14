@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace BookingService.Infrastructure.Kafka.Producers;
 
-public class BookingEventPublisher: IBookingEventPublisher
+public class BookingEventPublisher : IBookingEventPublisher
 {
     private readonly IProducer<BookingEventKey, BookingEventValue> _producer;
     private readonly ConnectionOptions _connectionOptions;
@@ -21,7 +21,7 @@ public class BookingEventPublisher: IBookingEventPublisher
         {
             BootstrapServers = _connectionOptions.Host,
             SecurityProtocol = _connectionOptions.SecurityProtocol,
-            Acks = Acks.All
+            Acks = Acks.All,
         };
         _producer = new ProducerBuilder<BookingEventKey, BookingEventValue>(config).SetKeySerializer(key).SetValueSerializer(value).Build();
     }
@@ -34,15 +34,15 @@ public class BookingEventPublisher: IBookingEventPublisher
             BookingCreated = new BookingCreated
             {
                 BookingId = bookingId,
-                CreatedBy = createdBy
-            }
+                CreatedBy = createdBy,
+            },
         };
         var producerMessage = new Message<BookingEventKey, BookingEventValue>
         {
-            Key = key, 
-            Value = value
+            Key = key,
+            Value = value,
         };
-        
+
         await _producer.ProduceAsync(_publisherOptions.BookingCreatedTopic, producerMessage, cancellationToken);
     }
 
@@ -55,15 +55,15 @@ public class BookingEventPublisher: IBookingEventPublisher
             {
                 BookingId = bookingId,
                 CancelledBy = cancelledBy,
-                Reason = reason
-            }
+                Reason = reason,
+            },
         };
         var producerMessage = new Message<BookingEventKey, BookingEventValue>
         {
-            Key = key, 
-            Value = value
+            Key = key,
+            Value = value,
         };
-        
+
         await _producer.ProduceAsync(_publisherOptions.BookingCancelledTopic, producerMessage, cancellationToken);
     }
 
@@ -74,15 +74,15 @@ public class BookingEventPublisher: IBookingEventPublisher
         {
             BookingCompleted = new BookingCompleted
             {
-                BookingId = bookingId
-            }
+                BookingId = bookingId,
+            },
         };
         var producerMessage = new Message<BookingEventKey, BookingEventValue>
         {
             Key = key,
-            Value = value
+            Value = value,
         };
-        
+
         await _producer.ProduceAsync(_publisherOptions.BookingCompletedTopic, producerMessage, cancellationToken);
     }
 }

@@ -9,5 +9,5 @@ public enum BookingHistoryItemKind
     [PgName("cancelled")]
     Cancelled,
     [PgName("completed")]
-    Completed
+    Completed,
 }

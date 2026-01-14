@@ -1,5 +1,4 @@
-﻿using System.Transactions;
-using BookingService.Application.Abstractions.Messaging;
+﻿using BookingService.Application.Abstractions.Messaging;
 using BookingService.Application.Abstractions.Queries;
 using BookingService.Application.Abstractions.Repositories;
 using BookingService.Application.Contracts.DTO;
@@ -7,6 +6,7 @@ using BookingService.Application.Contracts.Services;
 using BookingService.Application.Domain.Entities;
 using BookingService.Application.Domain.Enums;
 using BookingService.Application.Domain.Records;
+using System.Transactions;
 
 namespace BookingService.Application.Services;
 
@@ -39,14 +39,14 @@ public class BookingsService : IBookingService
 
         await _tutorServiceClient.ValidateSlotAsync(dto.TutorId, dto.TimeSlotId, dto.SubjectId);
 
-        Booking booking = new Booking
+        var booking = new Booking
         {
             TutorId = dto.TutorId,
             TimeSlotId = dto.TimeSlotId,
             SubjectId = dto.SubjectId,
             BookingStatus = BookingStatus.Created,
             BookingCreatedAt = DateTimeOffset.Now.UtcDateTime,
-            BookingCreatedBy = dto.BookingCreatedBy
+            BookingCreatedBy = dto.BookingCreatedBy,
         };
         long bookingId = await _bookingRepository.CreateAsync(booking);
 
@@ -57,7 +57,7 @@ public class BookingsService : IBookingService
             BookingId = bookingId,
             BookingHistoryItemKind = BookingHistoryItemKind.Created,
             BookingHistoryItemCreatedAt = DateTimeOffset.Now.UtcDateTime,
-            BookingHistoryItemPayload = new HistoryItemPayloadBookingCreated(dto.BookingCreatedBy)
+            BookingHistoryItemPayload = new HistoryItemPayloadBookingCreated(dto.BookingCreatedBy),
         };
         await _bookingHistoryRepository.CreateBookingHistoryAsync(bookingHistory);
 
@@ -71,25 +71,28 @@ public class BookingsService : IBookingService
     {
         using TransactionScope transaction = Create(IsolationLevel.ReadCommitted);
 
-        var bookingDto = await _bookingRepository.GetByIdAsync(bookingId);
+        BookingDto bookingDto = await _bookingRepository.GetByIdAsync(bookingId);
 
         if (bookingDto == null)
         {
             throw new InvalidOperationException("Booking not found");
         }
+
         if (bookingDto.BookingCreatedBy != cancelledBy)
         {
             throw new InvalidOperationException("You don't have access to cancel this booking");
         }
+
         if (bookingDto.BookingStatus != BookingStatus.Created)
         {
             throw new InvalidOperationException("Only created booking can be cancelled");
         }
+
         if (DateTimeOffset.UtcNow - bookingDto.BookingCreatedAt > TimeSpan.FromHours(24))
         {
             throw new InvalidOperationException("You can't cancel your reservation after 24 hours");
         }
-        
+
         int answer = await _bookingRepository.UpdateAsync(bookingId, BookingStatus.Cancelled);
 
         await _tutorServiceClient.ReleaseSlotAsync(bookingDto.TimeSlotId);
@@ -99,7 +102,7 @@ public class BookingsService : IBookingService
             BookingId = bookingId,
             BookingHistoryItemKind = BookingHistoryItemKind.Cancelled,
             BookingHistoryItemCreatedAt = DateTimeOffset.Now.UtcDateTime,
-            BookingHistoryItemPayload = new HistoryItemPayloadBookingCancelled(cancelledBy, reason)
+            BookingHistoryItemPayload = new HistoryItemPayloadBookingCancelled(cancelledBy, reason),
         };
         await _bookingHistoryRepository.CreateBookingHistoryAsync(bookingHistory);
 
@@ -113,16 +116,17 @@ public class BookingsService : IBookingService
     {
         using TransactionScope transaction = Create(IsolationLevel.ReadCommitted);
 
-        var bookingDto = await _bookingRepository.GetByIdAsync(bookingId);
+        BookingDto bookingDto = await _bookingRepository.GetByIdAsync(bookingId);
         if (bookingDto == null)
         {
             throw new InvalidOperationException("Booking not found");
         }
+
         if (bookingDto.BookingStatus != BookingStatus.Created)
         {
             throw new InvalidOperationException("Only created booking can be completed");
         }
-        
+
         int answer = await _bookingRepository.UpdateAsync(bookingId, BookingStatus.Completed);
 
         var bookingHistory = new BookingHistory
@@ -130,7 +134,7 @@ public class BookingsService : IBookingService
             BookingId = bookingId,
             BookingHistoryItemKind = BookingHistoryItemKind.Completed,
             BookingHistoryItemCreatedAt = DateTimeOffset.Now.UtcDateTime,
-            BookingHistoryItemPayload = new HistoryItemPayloadBookingCompleted()
+            BookingHistoryItemPayload = new HistoryItemPayloadBookingCompleted(),
         };
         await _bookingHistoryRepository.CreateBookingHistoryAsync(bookingHistory);
 
@@ -144,7 +148,7 @@ public class BookingsService : IBookingService
     {
         using TransactionScope transaction = Create(IsolationLevel.ReadCommitted);
 
-        var bookingDto = await _bookingRepository.GetByIdAsync(bookingId);
+        BookingDto bookingDto = await _bookingRepository.GetByIdAsync(bookingId);
 
         transaction.Complete();
         return bookingDto;
@@ -167,15 +171,18 @@ public class BookingsService : IBookingService
                 SubjectId = bookingDto.SubjectId,
                 BookingStatus = bookingDto.BookingStatus,
                 BookingCreatedAt = bookingDto.BookingCreatedAt,
-                BookingCreatedBy = bookingDto.BookingCreatedBy
+                BookingCreatedBy = bookingDto.BookingCreatedBy,
             };
         }
 
         transaction.Complete();
     }
 
-    public async IAsyncEnumerable<BookingHistoryDto> QueryBookingHistoryAsync(long[] bookingIds,
-        BookingHistoryItemKind? kind, long cursor, int pageSize)
+    public async IAsyncEnumerable<BookingHistoryDto> QueryBookingHistoryAsync(
+        long[] bookingIds,
+        BookingHistoryItemKind? kind,
+        long cursor,
+        int pageSize)
     {
         using TransactionScope transaction = Create(IsolationLevel.ReadCommitted);
 

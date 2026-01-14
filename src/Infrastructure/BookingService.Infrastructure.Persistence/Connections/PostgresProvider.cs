@@ -16,10 +16,10 @@ public class PostgresProvider
         connectionString.Username = options.Username;
         connectionString.Password = options.Password;
         connectionString.Port = options.Port;
-        
+
         npgsqlDataSourceBuilder.MapEnum<BookingStatus>(pgName: "booking_status");
         npgsqlDataSourceBuilder.MapEnum<BookingHistoryItemKind>(pgName: "booking_history_item_kind");
-        
+
         _npgsqlDataSource = npgsqlDataSourceBuilder.Build();
     }
 

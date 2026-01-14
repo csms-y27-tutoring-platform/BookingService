@@ -7,7 +7,7 @@ public static class BookingHistoryMapper
 {
     public static BookingHistory MapperToProto(this BookingHistoryDto dto)
     {
-        BookingHistory history = new BookingHistory
+        var history = new BookingHistory
         {
             BookingHistoryItemId = dto.BookingHistoryItemId,
             BookingId = dto.BookingId,

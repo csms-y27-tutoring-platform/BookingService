@@ -8,7 +8,8 @@ public class TutorClient : ITutorServiceClient
     private readonly ValidationService.ValidationServiceClient _validationService;
     private readonly ScheduleService.ScheduleServiceClient _scheduleService;
 
-    public TutorClient(ValidationService.ValidationServiceClient validationService,
+    public TutorClient(
+        ValidationService.ValidationServiceClient validationService,
         ScheduleService.ScheduleServiceClient scheduleService)
     {
         _validationService = validationService;
@@ -17,11 +18,11 @@ public class TutorClient : ITutorServiceClient
 
     public async Task ValidateSlotAsync(long tutorId, long timeSlotId, long subjectId)
     {
-        ValidateSlotRequest request = new ValidateSlotRequest
+        var request = new ValidateSlotRequest
         {
             SlotId = timeSlotId.ToString(),
             TutorId = tutorId.ToString(),
-            SubjectId = subjectId.ToString()
+            SubjectId = subjectId.ToString(),
         };
         ValidateSlotResponse response = await _validationService.ValidateSlotAsync(request);
         if (!response.IsValid)
@@ -32,19 +33,19 @@ public class TutorClient : ITutorServiceClient
 
     public async Task ReserveSlotAsync(long timeSlotId, long bookingId)
     {
-        ReserveSlotRequest request = new ReserveSlotRequest
+        var request = new ReserveSlotRequest
         {
             SlotId = timeSlotId.ToString(),
-            BookingId = bookingId.ToString()
+            BookingId = bookingId.ToString(),
         };
         await _scheduleService.ReserveSlotAsync(request);
     }
 
     public async Task ReleaseSlotAsync(long timeSlotId)
     {
-        ReleaseSlotRequest request = new ReleaseSlotRequest
+        var request = new ReleaseSlotRequest
         {
-            SlotId = timeSlotId.ToString()
+            SlotId = timeSlotId.ToString(),
         };
         await _scheduleService.ReleaseSlotAsync(request);
     }

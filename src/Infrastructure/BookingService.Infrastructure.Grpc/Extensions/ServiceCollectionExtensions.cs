@@ -23,7 +23,7 @@ public static class ServiceCollectionExtensions
             o.Address = new Uri(options.Value.Address);
         });
         serviceCollection.AddScoped<ITutorServiceClient, TutorClient>();
-        
+
         return serviceCollection;
     }
 }

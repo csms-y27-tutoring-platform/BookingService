@@ -7,6 +7,6 @@ namespace BookingService.Application.Abstractions.Repositories;
 public interface IBookingHistoryRepository
 {
     Task<long> CreateBookingHistoryAsync(BookingHistory bookingHistory);
-    
+
     IAsyncEnumerable<BookingHistoryDto> QueryBookingHistoryAsync(BookingHistoryQuery query);
 }

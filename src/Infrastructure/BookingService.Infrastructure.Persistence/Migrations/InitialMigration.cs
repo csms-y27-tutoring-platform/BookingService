@@ -47,7 +47,7 @@ public class InitialMigration : IMigration
                                booking_history_item_created_at timestamp with time zone  not null,
                                booking_history_item_payload    jsonb                     not null
                            );
-                           """
+                           """,
         });
     }
 
@@ -60,7 +60,7 @@ public class InitialMigration : IMigration
                            drop table if exists bookings;
                            drop type  if exists booking_history_item_kind;
                            drop type  if exists booking_status;
-                           """
+                           """,
         });
     }
 

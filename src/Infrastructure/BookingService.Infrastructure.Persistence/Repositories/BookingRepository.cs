@@ -1,11 +1,11 @@
-﻿using System.Data;
-using BookingService.Application.Abstractions.Queries;
+﻿using BookingService.Application.Abstractions.Queries;
 using BookingService.Application.Abstractions.Repositories;
 using BookingService.Application.Contracts.DTO;
 using BookingService.Application.Domain.Entities;
 using BookingService.Application.Domain.Enums;
 using BookingService.Infrastructure.Persistence.Connections;
 using Npgsql;
+using System.Data;
 
 namespace BookingService.Infrastructure.Persistence.Repositories;
 
@@ -17,7 +17,7 @@ public class BookingRepository : IBookingRepository
     {
         _postgresProvider = postgresProvider;
     }
-    
+
     public async Task<long> CreateAsync(Booking booking)
     {
         const string sql = """
@@ -36,10 +36,10 @@ public class BookingRepository : IBookingRepository
                 new NpgsqlParameter("subject_id", booking.SubjectId),
                 new NpgsqlParameter("booking_status", booking.BookingStatus),
                 new NpgsqlParameter("booking_created_by", booking.BookingCreatedBy),
-                new NpgsqlParameter("booking_created_at", booking.BookingCreatedAt)
-            }
+                new NpgsqlParameter("booking_created_at", booking.BookingCreatedAt),
+            },
         };
-        
+
         NpgsqlDataReader reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
         {
@@ -63,13 +63,12 @@ public class BookingRepository : IBookingRepository
             Parameters =
             {
                 new NpgsqlParameter("booking_id", bookingId),
-                new NpgsqlParameter("booking_status", status)
-            }
+                new NpgsqlParameter("booking_status", status),
+            },
         };
-        
+
         NpgsqlDataReader reader = await command.ExecuteReaderAsync();
         return reader.RecordsAffected;
-
     }
 
     public async Task<BookingDto> GetByIdAsync(long bookingId)
@@ -85,10 +84,10 @@ public class BookingRepository : IBookingRepository
         {
             Parameters =
             {
-                new NpgsqlParameter("booking_id", bookingId)
-            }
+                new NpgsqlParameter("booking_id", bookingId),
+            },
         };
-        
+
         NpgsqlDataReader reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
         {
@@ -103,6 +102,7 @@ public class BookingRepository : IBookingRepository
                 BookingCreatedAt = DataReaderExtensions.GetFieldValue<DateTimeOffset>(reader, "booking_created_at"),
             };
         }
+
         throw new InvalidOperationException();
     }
 
@@ -132,10 +132,10 @@ public class BookingRepository : IBookingRepository
                 new NpgsqlParameter("status", query.Status is null ? DBNull.Value : query.Status),
                 new NpgsqlParameter("author", query.BookingCreatedBy is null ? DBNull.Value : query.BookingCreatedBy),
                 new NpgsqlParameter("cursor", query.Cursor),
-                new NpgsqlParameter("page_size", query.PageSize)
-            }
+                new NpgsqlParameter("page_size", query.PageSize),
+            },
         };
-        
+
         await using NpgsqlDataReader reader = await command.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
@@ -147,7 +147,7 @@ public class BookingRepository : IBookingRepository
                 SubjectId = DataReaderExtensions.GetInt64(reader, "subject_id"),
                 BookingStatus = DataReaderExtensions.GetFieldValue<BookingStatus>(reader, "booking_status"),
                 BookingCreatedBy = DataReaderExtensions.GetString(reader, "booking_created_by"),
-                BookingCreatedAt = DataReaderExtensions.GetFieldValue<DateTimeOffset>(reader, "booking_created_at")
+                BookingCreatedAt = DataReaderExtensions.GetFieldValue<DateTimeOffset>(reader, "booking_created_at"),
             };
         }
     }

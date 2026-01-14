@@ -1,7 +1,7 @@
 ﻿using BookingService.Application.Extensions;
-using BookingService.Infrastructure.Persistence.Extensions;
 using BookingService.Infrastructure.Grpc.Extensions;
 using BookingService.Infrastructure.Kafka.Extension;
+using BookingService.Infrastructure.Persistence.Extensions;
 using BookingService.Presentation.Grpc.Services;
 using BookingService.Presentation.Kafka.Extensions;
 using FluentMigrator.Runner;
@@ -26,7 +26,7 @@ WebApplication app = builder.Build();
 app.MapGrpcService<BookingGrpcService>();
 app.MapGrpcReflectionService();
 
-using var scope = app.Services.CreateScope();
+using IServiceScope scope = app.Services.CreateScope();
 IMigrationRunner runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
 runner.MigrateUp();
 

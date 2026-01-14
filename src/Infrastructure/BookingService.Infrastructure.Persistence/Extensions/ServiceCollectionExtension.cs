@@ -39,7 +39,7 @@ public static class ServiceCollectionExtension
 
         serviceCollection.AddScoped<IBookingHistoryRepository, BookingHistoryRepository>();
         serviceCollection.AddScoped<IBookingRepository, BookingRepository>();
-        
+
         return serviceCollection;
     }
 }
