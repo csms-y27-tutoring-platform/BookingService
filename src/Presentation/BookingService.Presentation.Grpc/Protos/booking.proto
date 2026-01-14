@@ -68,10 +68,10 @@ message GetBookingResponse {
 
 message QueryBookingsRequest {
   repeated int64 ids = 1;
-  int64 tutor_id = 2;
-  int64 subject_id = 3;
-  BookingStatus status = 4;
-  string name = 5;
+  optional int64 tutor_id = 2;
+  optional int64 subject_id = 3;
+  optional BookingStatus status = 4;
+  optional string name = 5;
   int64 cursor = 6;
   int32 page_size = 7;
 }
@@ -81,7 +81,7 @@ message QueryBookingsResponse {
 
 message QueryBookingHistoryRequest {
   repeated int64 ids = 1;
-  BookingHistoryItemKind kind = 2;
+  optional BookingHistoryItemKind kind = 2;
   int64 cursor = 3;
   int32 page_size = 4;
 }
