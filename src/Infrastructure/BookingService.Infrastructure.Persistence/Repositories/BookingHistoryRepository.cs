@@ -24,7 +24,7 @@ public class BookingHistoryRepository : IBookingHistoryRepository
     {
         const string sql = """
                            insert into booking_history (booking_id, booking_history_item_kind, booking_history_item_created_at, booking_history_item_payload)
-                           values (:booking_id, :booking_history_item_kind, :booking_history_item_created_at, :booking_history_item_payload)
+                           values (:booking_id, :booking_history_item_kind, :booking_history_item_created_at, :booking_history_item_payload::jsonb)
                            returning booking_history_item_id;
                            """;
 
