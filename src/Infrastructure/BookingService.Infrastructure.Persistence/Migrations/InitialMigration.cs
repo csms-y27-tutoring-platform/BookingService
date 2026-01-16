@@ -19,9 +19,11 @@ public class InitialMigration : IMigration
                                 when duplicate_object then null;
                            end$$;
                            
+                           create extension if not exists "pgcrypto";
+                                  
                            create table if not exists bookings
                            (
-                               booking_id         uuid   primary key generated always as identity,
+                               booking_id         uuid   primary key default gen_random_uuid(),
                                
                                tutor_id           uuid                     not null,
                                time_slot_id       uuid                     not null,
@@ -40,7 +42,7 @@ public class InitialMigration : IMigration
 
                            create table if not exists booking_history
                            (
-                               booking_history_item_id         uuid primary key generated always as identity,
+                               booking_history_item_id         uuid primary key default gen_random_uuid(),
                                
                                booking_id                      uuid                      not null references bookings (booking_id),
                                booking_history_item_kind       booking_history_item_kind not null,
