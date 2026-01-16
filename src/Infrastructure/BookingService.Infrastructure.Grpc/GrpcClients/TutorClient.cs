@@ -16,7 +16,7 @@ public class TutorClient : ITutorServiceClient
         _scheduleService = scheduleService;
     }
 
-    public async Task ValidateSlotAsync(long tutorId, long timeSlotId, long subjectId)
+    public async Task ValidateSlotAsync(Guid tutorId, Guid timeSlotId, Guid subjectId)
     {
         var request = new ValidateSlotRequest
         {
@@ -31,7 +31,7 @@ public class TutorClient : ITutorServiceClient
         }
     }
 
-    public async Task ReserveSlotAsync(long timeSlotId, long bookingId)
+    public async Task ReserveSlotAsync(Guid timeSlotId, Guid bookingId)
     {
         var request = new ReserveSlotRequest
         {
@@ -41,7 +41,7 @@ public class TutorClient : ITutorServiceClient
         await _scheduleService.ReserveSlotAsync(request);
     }
 
-    public async Task ReleaseSlotAsync(long timeSlotId)
+    public async Task ReleaseSlotAsync(Guid timeSlotId)
     {
         var request = new ReleaseSlotRequest
         {

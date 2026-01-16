@@ -26,14 +26,14 @@ public class BookingEventPublisher : IBookingEventPublisher
         _producer = new ProducerBuilder<BookingEventKey, BookingEventValue>(config).SetKeySerializer(key).SetValueSerializer(value).Build();
     }
 
-    public async Task PublishBookingCreated(long bookingId, string createdBy, CancellationToken cancellationToken)
+    public async Task PublishBookingCreated(Guid bookingId, string createdBy, CancellationToken cancellationToken)
     {
-        var key = new BookingEventKey { BookingId = bookingId };
+        var key = new BookingEventKey { BookingId = bookingId.ToString() };
         var value = new BookingEventValue
         {
             BookingCreated = new BookingCreated
             {
-                BookingId = bookingId,
+                BookingId = bookingId.ToString(),
                 CreatedBy = createdBy,
             },
         };
@@ -46,14 +46,14 @@ public class BookingEventPublisher : IBookingEventPublisher
         await _producer.ProduceAsync(_publisherOptions.BookingCreatedTopic, producerMessage, cancellationToken);
     }
 
-    public async Task PublishBookingCancelled(long bookingId, string cancelledBy, string reason, CancellationToken cancellationToken)
+    public async Task PublishBookingCancelled(Guid bookingId, string cancelledBy, string reason, CancellationToken cancellationToken)
     {
-        var key = new BookingEventKey { BookingId = bookingId };
+        var key = new BookingEventKey { BookingId = bookingId.ToString() };
         var value = new BookingEventValue
         {
             BookingCancelled = new BookingCancelled
             {
-                BookingId = bookingId,
+                BookingId = bookingId.ToString(),
                 CancelledBy = cancelledBy,
                 Reason = reason,
             },
@@ -67,14 +67,14 @@ public class BookingEventPublisher : IBookingEventPublisher
         await _producer.ProduceAsync(_publisherOptions.BookingCancelledTopic, producerMessage, cancellationToken);
     }
 
-    public async Task PublishBookingCompleted(long bookingId, CancellationToken cancellationToken)
+    public async Task PublishBookingCompleted(Guid bookingId, CancellationToken cancellationToken)
     {
-        var key = new BookingEventKey { BookingId = bookingId };
+        var key = new BookingEventKey { BookingId = bookingId.ToString() };
         var value = new BookingEventValue
         {
             BookingCompleted = new BookingCompleted
             {
-                BookingId = bookingId,
+                BookingId = bookingId.ToString(),
             },
         };
         var producerMessage = new Message<BookingEventKey, BookingEventValue>

@@ -19,36 +19,36 @@ public class BookingGrpcService : BookingService.BookingServiceBase
     {
         var dto = new BookingCreatingDto
         {
-            TutorId = request.TutorId,
-            TimeSlotId = request.TimeSlotId,
-            SubjectId = request.SubjectId,
+            TutorId = Guid.Parse(request.TutorId),
+            TimeSlotId = Guid.Parse(request.TimeSlotId),
+            SubjectId = Guid.Parse(request.SubjectId),
             BookingCreatedBy = request.Name,
         };
-        long bookingId = await _bookingService.CreateBookingAsync(dto);
-        return new BookingResponse { BookingId = bookingId };
+        Guid bookingId = await _bookingService.CreateBookingAsync(dto);
+        return new BookingResponse { BookingId = bookingId.ToString() };
     }
 
     public override async Task<CancelBookingResponse> CancelBooking(CancelBookingRequest request, ServerCallContext context)
     {
-        int result = await _bookingService.CancelBookingAsync(request.BookingId, request.Name, request.Reason);
+        int result = await _bookingService.CancelBookingAsync(Guid.Parse(request.BookingId), request.Name, request.Reason);
         return new CancelBookingResponse { Result = result };
     }
 
     public override async Task<CompleteBookingResponse> CompleteBooking(CompleteBookingRequest request, ServerCallContext context)
     {
-        int result = await _bookingService.CompleteBookingAsync(request.BookingId);
+        int result = await _bookingService.CompleteBookingAsync(Guid.Parse(request.BookingId));
         return new CompleteBookingResponse { Result = result };
     }
 
     public override async Task<GetBookingResponse> GetBookingById(GetBookingRequest request, ServerCallContext context)
     {
-        BookingDto dto = await _bookingService.GetBookingByIdAsync(request.BookingId);
+        BookingDto dto = await _bookingService.GetBookingByIdAsync(Guid.Parse(request.BookingId));
         var booking = new Booking
         {
-            BookingId = dto.BookingId,
-            TutorId = dto.TutorId,
-            TimeSlotId = dto.TimeSlotId,
-            SubjectId = dto.SubjectId,
+            BookingId = dto.BookingId.ToString(),
+            TutorId = dto.TutorId.ToString(),
+            TimeSlotId = dto.TimeSlotId.ToString(),
+            SubjectId = dto.SubjectId.ToString(),
             Status = dto.BookingStatus.MapperToGrpc(),
             CreatedAt = dto.BookingCreatedAt.ToTimestamp(),
             Name = dto.BookingCreatedBy,
@@ -58,12 +58,12 @@ public class BookingGrpcService : BookingService.BookingServiceBase
 
     public override async Task<QueryBookingsResponse> QueryBookings(QueryBookingsRequest request, ServerCallContext context)
     {
-        long[] ids = request.Ids.ToArray<long>();
-        long? tutorId = request.TutorId;
-        long? subjectId = request.SubjectId;
+        Guid[] ids = request.Ids.Select(Guid.Parse).ToArray();
+        Guid? tutorId = Guid.Parse(request.TutorId);
+        Guid? subjectId = Guid.Parse(request.SubjectId);
         Application.Domain.Enums.BookingStatus? status = request.Status.MapperToDomain();
         string? name = request.Name;
-        long cursor = request.Cursor;
+        var cursor = Guid.Parse(request.Cursor);
         int pageSize = request.PageSize;
         IAsyncEnumerable<BookingDto> bookings = _bookingService.QueryBookingsAsync(ids, tutorId, subjectId, status, name, cursor, pageSize);
         var response = new QueryBookingsResponse();
@@ -71,10 +71,10 @@ public class BookingGrpcService : BookingService.BookingServiceBase
         {
             response.Bookings.Add(new Booking
             {
-                BookingId = dto.BookingId,
-                TutorId = dto.TutorId,
-                TimeSlotId = dto.TimeSlotId,
-                SubjectId = dto.SubjectId,
+                BookingId = dto.BookingId.ToString(),
+                TutorId = dto.TutorId.ToString(),
+                TimeSlotId = dto.TimeSlotId.ToString(),
+                SubjectId = dto.SubjectId.ToString(),
                 Status = dto.BookingStatus.MapperToGrpc(),
                 CreatedAt = dto.BookingCreatedAt.ToTimestamp(),
                 Name = dto.BookingCreatedBy,
@@ -88,9 +88,9 @@ public class BookingGrpcService : BookingService.BookingServiceBase
         QueryBookingHistoryRequest request,
         ServerCallContext context)
     {
-        long[] ids = request.Ids.ToArray<long>();
+        Guid[] ids = request.Ids.Select(Guid.Parse).ToArray();
         Application.Domain.Enums.BookingHistoryItemKind? kind = request.Kind.MapperToDomain();
-        long cursor = request.Cursor;
+        var cursor = Guid.Parse(request.Cursor);
         int pageSize = request.PageSize;
         IAsyncEnumerable<BookingHistoryDto> bookingHistory =
             _bookingService.QueryBookingHistoryAsync(ids, kind, cursor, pageSize);

@@ -2,9 +2,9 @@
 
 public interface IBookingEventPublisher
 {
-    Task PublishBookingCreated(long bookingId, string createdBy, CancellationToken cancellationToken);
+    Task PublishBookingCreated(Guid bookingId, string createdBy, CancellationToken cancellationToken);
 
-    Task PublishBookingCancelled(long bookingId, string cancelledBy, string reason, CancellationToken cancellationToken);
+    Task PublishBookingCancelled(Guid bookingId, string cancelledBy, string reason, CancellationToken cancellationToken);
 
-    Task PublishBookingCompleted(long bookingId, CancellationToken cancellationToken);
+    Task PublishBookingCompleted(Guid bookingId, CancellationToken cancellationToken);
 }

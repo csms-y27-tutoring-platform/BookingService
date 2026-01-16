@@ -5,9 +5,9 @@ namespace BookingService.Application.Contracts.DTO;
 
 public class BookingHistoryDto
 {
-    public long BookingHistoryItemId { get; init; }
+    public Guid BookingHistoryItemId { get; init; }
 
-    public long BookingId { get; init; }
+    public Guid BookingId { get; init; }
 
     public BookingHistoryItemKind BookingHistoryItemKind { get; init; }
 

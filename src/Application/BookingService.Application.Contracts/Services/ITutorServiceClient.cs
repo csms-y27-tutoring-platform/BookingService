@@ -2,9 +2,9 @@
 
 public interface ITutorServiceClient
 {
-    Task ValidateSlotAsync(long tutorId, long timeSlotId, long subjectId);
+    Task ValidateSlotAsync(Guid tutorId, Guid timeSlotId, Guid subjectId);
 
-    Task ReserveSlotAsync(long timeSlotId, long bookingId);
+    Task ReserveSlotAsync(Guid timeSlotId, Guid bookingId);
 
-    Task ReleaseSlotAsync(long timeSlotId);
+    Task ReleaseSlotAsync(Guid timeSlotId);
 }

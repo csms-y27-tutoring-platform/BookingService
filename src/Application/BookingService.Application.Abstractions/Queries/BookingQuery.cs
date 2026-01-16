@@ -3,10 +3,10 @@
 namespace BookingService.Application.Abstractions.Queries;
 
 public record BookingQuery(
-    long[] Ids,
-    long? TutorId,
-    long? SubjectId,
+    Guid[] Ids,
+    Guid? TutorId,
+    Guid? SubjectId,
     BookingStatus? Status,
     string? BookingCreatedBy,
-    long Cursor,
+    Guid Cursor,
     int PageSize);

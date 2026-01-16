@@ -9,8 +9,8 @@ public static class BookingHistoryMapper
     {
         var history = new BookingHistory
         {
-            BookingHistoryItemId = dto.BookingHistoryItemId,
-            BookingId = dto.BookingId,
+            BookingHistoryItemId = dto.BookingHistoryItemId.ToString(),
+            BookingId = dto.BookingId.ToString(),
             Kind = dto.BookingHistoryItemKind.MapperToGrpc(),
             CreatedAt = dto.BookingHistoryItemCreatedAt.ToTimestamp(),
             Payload = dto.BookingHistoryItemPayload.MapperToGrpc(),

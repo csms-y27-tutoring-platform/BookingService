@@ -3,7 +3,7 @@
 namespace BookingService.Application.Abstractions.Queries;
 
 public record BookingHistoryQuery(
-    long[] BookingIds,
+    Guid[] BookingIds,
     BookingHistoryItemKind? Kind,
-    long Cursor,
+    Guid Cursor,
     int PageSize);

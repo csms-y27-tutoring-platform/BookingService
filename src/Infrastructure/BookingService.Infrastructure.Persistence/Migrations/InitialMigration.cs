@@ -21,11 +21,11 @@ public class InitialMigration : IMigration
                            
                            create table if not exists bookings
                            (
-                               booking_id         bigint primary key generated always as identity,
+                               booking_id         uuid   primary key generated always as identity,
                                
-                               tutor_id           bigint                   not null,
-                               time_slot_id       bigint                   not null,
-                               subject_id         bigint                   not null,
+                               tutor_id           uuid                     not null,
+                               time_slot_id       uuid                     not null,
+                               subject_id         uuid                     not null,
                                booking_status     booking_status           not null,
                                booking_created_by text                     not null,
                                booking_created_at timestamp with time zone not null
@@ -40,9 +40,9 @@ public class InitialMigration : IMigration
 
                            create table if not exists booking_history
                            (
-                               booking_history_item_id         bigint primary key generated always as identity,
+                               booking_history_item_id         uuid primary key generated always as identity,
                                
-                               booking_id                      bigint                    not null references bookings (booking_id),
+                               booking_id                      uuid                      not null references bookings (booking_id),
                                booking_history_item_kind       booking_history_item_kind not null,
                                booking_history_item_created_at timestamp with time zone  not null,
                                booking_history_item_payload    jsonb                     not null

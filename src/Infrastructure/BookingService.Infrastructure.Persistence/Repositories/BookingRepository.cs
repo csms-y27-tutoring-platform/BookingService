@@ -19,7 +19,7 @@ public class BookingRepository : IBookingRepository
         _postgresProvider = postgresProvider;
     }
 
-    public async Task<long> CreateAsync(Booking booking)
+    public async Task<Guid> CreateAsync(Booking booking)
     {
         const string sql = """
                            insert into bookings (tutor_id, time_slot_id, subject_id, booking_status, booking_created_by, booking_created_at)
@@ -44,13 +44,13 @@ public class BookingRepository : IBookingRepository
         NpgsqlDataReader reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
         {
-            return DataReaderExtensions.GetInt64(reader, "booking_id");
+            return DataReaderExtensions.GetGuid(reader, "booking_id");
         }
 
         throw new InvalidOperationException();
     }
 
-    public async Task<int> UpdateAsync(long bookingId, BookingStatus status)
+    public async Task<int> UpdateAsync(Guid bookingId, BookingStatus status)
     {
         const string sql = """
                            update bookings
@@ -72,7 +72,7 @@ public class BookingRepository : IBookingRepository
         return reader.RecordsAffected;
     }
 
-    public async Task<BookingDto> GetByIdAsync(long bookingId)
+    public async Task<BookingDto> GetByIdAsync(Guid bookingId)
     {
         const string sql = """
                            select booking_id, tutor_id, time_slot_id, subject_id, booking_status, booking_created_by, booking_created_at
@@ -94,10 +94,10 @@ public class BookingRepository : IBookingRepository
         {
             return new BookingDto
             {
-                BookingId = DataReaderExtensions.GetInt64(reader, "booking_id"),
-                TutorId = DataReaderExtensions.GetInt64(reader, "tutor_id"),
-                TimeSlotId = DataReaderExtensions.GetInt64(reader, "time_slot_id"),
-                SubjectId = DataReaderExtensions.GetInt64(reader, "subject_id"),
+                BookingId = DataReaderExtensions.GetGuid(reader, "booking_id"),
+                TutorId = DataReaderExtensions.GetGuid(reader, "tutor_id"),
+                TimeSlotId = DataReaderExtensions.GetGuid(reader, "time_slot_id"),
+                SubjectId = DataReaderExtensions.GetGuid(reader, "subject_id"),
                 BookingStatus = DataReaderExtensions.GetFieldValue<BookingStatus>(reader, "booking_status"),
                 BookingCreatedBy = DataReaderExtensions.GetString(reader, "booking_created_by"),
                 BookingCreatedAt = DataReaderExtensions.GetFieldValue<DateTimeOffset>(reader, "booking_created_at"),
@@ -146,10 +146,10 @@ public class BookingRepository : IBookingRepository
         {
             yield return new BookingDto
             {
-                BookingId = DataReaderExtensions.GetInt64(reader, "booking_id"),
-                TutorId = DataReaderExtensions.GetInt64(reader, "tutor_id"),
-                TimeSlotId = DataReaderExtensions.GetInt64(reader, "time_slot_id"),
-                SubjectId = DataReaderExtensions.GetInt64(reader, "subject_id"),
+                BookingId = DataReaderExtensions.GetGuid(reader, "booking_id"),
+                TutorId = DataReaderExtensions.GetGuid(reader, "tutor_id"),
+                TimeSlotId = DataReaderExtensions.GetGuid(reader, "time_slot_id"),
+                SubjectId = DataReaderExtensions.GetGuid(reader, "subject_id"),
                 BookingStatus = DataReaderExtensions.GetFieldValue<BookingStatus>(reader, "booking_status"),
                 BookingCreatedBy = DataReaderExtensions.GetString(reader, "booking_created_by"),
                 BookingCreatedAt = DataReaderExtensions.GetFieldValue<DateTimeOffset>(reader, "booking_created_at"),

@@ -20,7 +20,7 @@ public class BookingHistoryRepository : IBookingHistoryRepository
         _postgresProvider = postgresProvider;
     }
 
-    public async Task<long> CreateBookingHistoryAsync(BookingHistory bookingHistory)
+    public async Task<Guid> CreateBookingHistoryAsync(BookingHistory bookingHistory)
     {
         const string sql = """
                            insert into booking_history (booking_id, booking_history_item_kind, booking_history_item_created_at, booking_history_item_payload)
@@ -43,7 +43,7 @@ public class BookingHistoryRepository : IBookingHistoryRepository
         NpgsqlDataReader reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
         {
-            return reader.GetInt64(0);
+            return reader.GetGuid(0);
         }
 
         throw new InvalidOperationException();
@@ -79,8 +79,8 @@ public class BookingHistoryRepository : IBookingHistoryRepository
             HistoryItemPayload payload = JsonSerializer.Deserialize<HistoryItemPayload>(DataReaderExtensions.GetString(reader, "booking_history_item_payload")) ?? throw new InvalidOperationException();
             yield return new BookingHistoryDto
             {
-                BookingHistoryItemId = DataReaderExtensions.GetInt64(reader, "booking_history_item_id"),
-                BookingId = DataReaderExtensions.GetInt64(reader, "booking_id"),
+                BookingHistoryItemId = DataReaderExtensions.GetGuid(reader, "booking_history_item_id"),
+                BookingId = DataReaderExtensions.GetGuid(reader, "booking_id"),
                 BookingHistoryItemKind =
                     DataReaderExtensions.GetFieldValue<BookingHistoryItemKind>(reader, "booking_history_item_kind"),
                 BookingHistoryItemCreatedAt =

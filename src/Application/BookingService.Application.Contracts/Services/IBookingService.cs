@@ -5,15 +5,15 @@ namespace BookingService.Application.Contracts.Services;
 
 public interface IBookingService
 {
-    Task<long> CreateBookingAsync(BookingCreatingDto dto);
+    Task<Guid> CreateBookingAsync(BookingCreatingDto dto);
 
-    Task<int> CancelBookingAsync(long bookingId, string cancelledBy, string reason);
+    Task<int> CancelBookingAsync(Guid bookingId, string cancelledBy, string reason);
 
-    Task<int> CompleteBookingAsync(long bookingId);
+    Task<int> CompleteBookingAsync(Guid bookingId);
 
-    Task<BookingDto> GetBookingByIdAsync(long bookingId);
+    Task<BookingDto> GetBookingByIdAsync(Guid bookingId);
 
-    IAsyncEnumerable<BookingDto> QueryBookingsAsync(long[] ids, long? tutorId, long? subjectId, BookingStatus? status, string? bookingCreatedBy, long cursor, int pageSize);
+    IAsyncEnumerable<BookingDto> QueryBookingsAsync(Guid[] ids, Guid? tutorId, Guid? subjectId, BookingStatus? status, string? bookingCreatedBy, Guid cursor, int pageSize);
 
-    IAsyncEnumerable<BookingHistoryDto> QueryBookingHistoryAsync(long[] bookingIds, BookingHistoryItemKind? kind, long cursor, int pageSize);
+    IAsyncEnumerable<BookingHistoryDto> QueryBookingHistoryAsync(Guid[] bookingIds, BookingHistoryItemKind? kind, Guid cursor, int pageSize);
 }
