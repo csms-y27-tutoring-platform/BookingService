@@ -59,10 +59,10 @@ public class BookingGrpcService : BookingService.BookingServiceBase
     public override async Task<QueryBookingsResponse> QueryBookings(QueryBookingsRequest request, ServerCallContext context)
     {
         long[] ids = request.Ids.ToArray<long>();
-        long tutorId = request.TutorId;
-        long subjectId = request.SubjectId;
-        Application.Domain.Enums.BookingStatus status = request.Status.MapperToDomain();
-        string name = request.Name;
+        long? tutorId = request.TutorId;
+        long? subjectId = request.SubjectId;
+        Application.Domain.Enums.BookingStatus? status = request.Status.MapperToDomain();
+        string? name = request.Name;
         long cursor = request.Cursor;
         int pageSize = request.PageSize;
         IAsyncEnumerable<BookingDto> bookings = _bookingService.QueryBookingsAsync(ids, tutorId, subjectId, status, name, cursor, pageSize);
@@ -89,7 +89,7 @@ public class BookingGrpcService : BookingService.BookingServiceBase
         ServerCallContext context)
     {
         long[] ids = request.Ids.ToArray<long>();
-        Application.Domain.Enums.BookingHistoryItemKind kind = request.Kind.MapperToDomain();
+        Application.Domain.Enums.BookingHistoryItemKind? kind = request.Kind.MapperToDomain();
         long cursor = request.Cursor;
         int pageSize = request.PageSize;
         IAsyncEnumerable<BookingHistoryDto> bookingHistory =

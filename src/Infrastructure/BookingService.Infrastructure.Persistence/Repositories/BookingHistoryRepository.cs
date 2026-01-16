@@ -56,9 +56,9 @@ public class BookingHistoryRepository : IBookingHistoryRepository
                            from booking_history
                            where
                                (booking_history_item_id > :cursor)
-                               and (cardinality(:booking_ids) = 0 or booking_id = any(:booking_ids))
+                               and (booking_id = any(:booking_ids))
                                and (:booking_history_item_kind::booking_history_item_kind is null or booking_history_item_kind = :booking_history_item_kind)
-                               limit page_size
+                               limit :page_size
                            """;
 
         await using NpgsqlConnection connection = await _postgresProvider.OpenConnection();

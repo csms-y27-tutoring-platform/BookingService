@@ -13,7 +13,7 @@ public interface IBookingService
 
     Task<BookingDto> GetBookingByIdAsync(long bookingId);
 
-    IAsyncEnumerable<BookingDto> QueryBookingsAsync(long[] ids, long tutorId, long subjectId, BookingStatus? status, string? bookingCreatedBy, long cursor, int pageSize);
+    IAsyncEnumerable<BookingDto> QueryBookingsAsync(long[] ids, long? tutorId, long? subjectId, BookingStatus? status, string? bookingCreatedBy, long cursor, int pageSize);
 
     IAsyncEnumerable<BookingHistoryDto> QueryBookingHistoryAsync(long[] bookingIds, BookingHistoryItemKind? kind, long cursor, int pageSize);
 }

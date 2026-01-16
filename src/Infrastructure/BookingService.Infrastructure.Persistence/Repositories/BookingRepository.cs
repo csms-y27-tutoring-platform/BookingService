@@ -5,6 +5,7 @@ using BookingService.Application.Domain.Entities;
 using BookingService.Application.Domain.Enums;
 using BookingService.Infrastructure.Persistence.Connections;
 using Npgsql;
+using NpgsqlTypes;
 using System.Data;
 
 namespace BookingService.Infrastructure.Persistence.Repositories;
@@ -113,11 +114,11 @@ public class BookingRepository : IBookingRepository
                            from bookings
                            where
                                (booking_id > :cursor)
-                               and (cardinality(:ids) = 0 or booking_id = any (:ids))
+                               and (booking_id = any (:ids))
                                and (:tutor_id is null or tutor_id = :tutor_id)
                                and (:subject_id is null or subject_id = :subject_id)
                                and (:status::booking_status is null or booking_status = :status)
-                               and (:author::text is null or booking_created_by = :author)
+                               and (:author is null or booking_created_by = :author)
                            limit :page_size;
                            """;
         await using NpgsqlConnection connection = await _postgresProvider.OpenConnection();
@@ -127,10 +128,13 @@ public class BookingRepository : IBookingRepository
             Parameters =
             {
                 new NpgsqlParameter("ids", query.Ids),
-                new NpgsqlParameter("tutor_id", query.TutorId),
-                new NpgsqlParameter("subject_id", query.SubjectId),
+                new NpgsqlParameter("tutor_id", query.TutorId is null ? DBNull.Value : query.TutorId),
+                new NpgsqlParameter("subject_id", query.SubjectId is null ? DBNull.Value : query.SubjectId),
                 new NpgsqlParameter("status", query.Status is null ? DBNull.Value : query.Status),
-                new NpgsqlParameter("author", query.BookingCreatedBy is null ? DBNull.Value : query.BookingCreatedBy),
+                new NpgsqlParameter("author", NpgsqlDbType.Text)
+                {
+                    Value = query.BookingCreatedBy ?? (object)DBNull.Value,
+                },
                 new NpgsqlParameter("cursor", query.Cursor),
                 new NpgsqlParameter("page_size", query.PageSize),
             },

@@ -154,7 +154,7 @@ public class BookingsService : IBookingService
         return bookingDto;
     }
 
-    public async IAsyncEnumerable<BookingDto> QueryBookingsAsync(long[] ids, long tutorId, long subjectId, BookingStatus? status, string? bookingCreatedBy, long cursor, int pageSize)
+    public async IAsyncEnumerable<BookingDto> QueryBookingsAsync(long[] ids, long? tutorId, long? subjectId, BookingStatus? status, string? bookingCreatedBy, long cursor, int pageSize)
     {
         using TransactionScope transaction = Create(IsolationLevel.ReadCommitted);
 
