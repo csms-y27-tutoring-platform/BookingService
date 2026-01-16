@@ -24,27 +24,27 @@ enum BookingStatus {
 }
 
 message Booking {
-  int64 booking_id = 1;
-  int64 tutor_id = 2;
-  int64 time_slot_id = 3;
-  int64 subject_id = 4;
+  string booking_id = 1;
+  string tutor_id = 2;
+  string time_slot_id = 3;
+  string subject_id = 4;
   BookingStatus status = 5;
   google.protobuf.Timestamp created_at = 6;
   string name = 7;
 }
     
 message BookingRequest {
-  int64 tutor_id = 1;
-  int64 time_slot_id = 2;
-  int64 subject_id = 3;
+  string tutor_id = 1;
+  string time_slot_id = 2;
+  string subject_id = 3;
   string name = 4;
 }
 message BookingResponse {
-  int64 booking_id = 1;
+  string booking_id = 1;
 }
 
 message CancelBookingRequest {
-  int64 booking_id = 1;
+  string booking_id = 1;
   string name = 2;
   string reason = 3;
 }
@@ -53,26 +53,26 @@ message CancelBookingResponse {
 }
 
 message CompleteBookingRequest {
-  int64 booking_id = 1;
+  string booking_id = 1;
 }
 message CompleteBookingResponse {
   int32 result = 1;
 }
 
 message GetBookingRequest {
-  int64 booking_id = 1;
+  string booking_id = 1;
 }
 message GetBookingResponse {
   Booking booking = 1;
 }
 
 message QueryBookingsRequest {
-  repeated int64 ids = 1;
-  optional int64 tutor_id = 2;
-  optional int64 subject_id = 3;
+  repeated string ids = 1;
+  optional string tutor_id = 2;
+  optional string subject_id = 3;
   optional BookingStatus status = 4;
   optional string name = 5;
-  int64 cursor = 6;
+  string cursor = 6;
   int32 page_size = 7;
 }
 message QueryBookingsResponse {
@@ -80,9 +80,9 @@ message QueryBookingsResponse {
 }
 
 message QueryBookingHistoryRequest {
-  repeated int64 ids = 1;
+  repeated string ids = 1;
   optional BookingHistoryItemKind kind = 2;
-  int64 cursor = 3;
+  string cursor = 3;
   int32 page_size = 4;
 }
 message QueryBookingHistoryResponse {
