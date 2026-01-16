@@ -32,9 +32,9 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       ALLOW_PLAINTEXT_LISTENER: yes
       KAFKA_CREATE_TOPICS: >
-        booking.created:1:1,
-        booking.cancelled:1:1,
-        booking.completed:1:1
+        booking-created:1:1,
+        booking-cancelled:1:1,
+        booking-completed:1:1
     depends_on:
       - zookeeper
     networks:

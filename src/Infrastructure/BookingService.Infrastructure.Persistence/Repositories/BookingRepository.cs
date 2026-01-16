@@ -118,7 +118,7 @@ public class BookingRepository : IBookingRepository
                                and (:tutor_id is null or tutor_id = :tutor_id)
                                and (:subject_id is null or subject_id = :subject_id)
                                and (:status::booking_status is null or booking_status = :status)
-                               and (:author is null or booking_created_by = :author)
+                               and (:author is null or :author ='' or booking_created_by = :author)
                            limit :page_size;
                            """;
         await using NpgsqlConnection connection = await _postgresProvider.OpenConnection();
@@ -133,7 +133,8 @@ public class BookingRepository : IBookingRepository
                 new NpgsqlParameter("status", query.Status is null ? DBNull.Value : query.Status),
                 new NpgsqlParameter("author", NpgsqlDbType.Text)
                 {
-                    Value = query.BookingCreatedBy ?? (object)DBNull.Value,
+                    Value = string.IsNullOrEmpty(query.BookingCreatedBy)
+                    ? DBNull.Value : query.BookingCreatedBy,
                 },
                 new NpgsqlParameter("cursor", query.Cursor),
                 new NpgsqlParameter("page_size", query.PageSize),
