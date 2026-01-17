@@ -59,8 +59,8 @@ public class BookingGrpcService : BookingService.BookingServiceBase
     public override async Task<QueryBookingsResponse> QueryBookings(QueryBookingsRequest request, ServerCallContext context)
     {
         Guid[] ids = request.Ids.Select(Guid.Parse).ToArray();
-        Guid? tutorId = Guid.Parse(request.TutorId);
-        Guid? subjectId = Guid.Parse(request.SubjectId);
+        Guid? tutorId = Guid.TryParse(request.TutorId, out Guid tutor) ? tutor : null;
+        Guid? subjectId = Guid.TryParse(request.SubjectId, out Guid subject) ? subject : null;
         Application.Domain.Enums.BookingStatus? status = request.Status.MapperToDomain();
         string? name = request.Name;
         var cursor = Guid.Parse(request.Cursor);

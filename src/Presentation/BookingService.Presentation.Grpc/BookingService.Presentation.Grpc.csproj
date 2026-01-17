@@ -23,6 +23,7 @@
       <PackageReference Include="Grpc.AspNetCore" />
       <PackageReference Include="Grpc.AspNetCore.Server" />
       <PackageReference Include="Grpc.Core" />
+      <PackageReference Include="Grpc.Core.Api" />
       <PackageReference Include="Grpc.Tools">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -2,6 +2,7 @@
 using BookingService.Infrastructure.Grpc.Extensions;
 using BookingService.Infrastructure.Kafka.Extension;
 using BookingService.Infrastructure.Persistence.Extensions;
+using BookingService.Presentation.Grpc.Interceptors;
 using BookingService.Presentation.Grpc.Services;
 using BookingService.Presentation.Kafka.Extensions;
 using FluentMigrator.Runner;
@@ -20,6 +21,7 @@ builder.Services.AddKafkaProducerOptions();
 
 builder.Services.AddGrpcReflection();
 builder.Services.AddGrpc();
+builder.Services.AddGrpc(grpc => grpc.Interceptors.Add<ServerInterceptor>());
 
 WebApplication app = builder.Build();
 
